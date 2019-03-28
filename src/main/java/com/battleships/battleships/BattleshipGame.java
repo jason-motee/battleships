@@ -56,6 +56,8 @@ public class BattleshipGame {
             changePositionToAHitState(row, column, destroyer);
         } else if (squareAimedAt.getState().equals("*")) {
             System.out.println("This has already been hit!");
+        } else if (squareAimedAt.getState().equals("X")) {
+                System.out.println("This ship has already been destroyed!");
         } else if (squareAimedAtType.equals(battleshipSquare.getType())) {
             System.out.println("Target missed!");
             squareAimedAt.setState("o");
