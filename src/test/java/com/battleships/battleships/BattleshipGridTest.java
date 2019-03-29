@@ -45,7 +45,7 @@ public class BattleshipGridTest {
     }
 
     @Test
-    public void checkGridCountIsEqualTo25() {
+    public void checkGridCountIsEqualTo81() {
         battleshipGrid.printGrid();
 
         int gridCount = (int) Arrays.stream(battleshipGrid.getBoard())

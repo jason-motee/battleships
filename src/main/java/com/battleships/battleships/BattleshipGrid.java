@@ -38,7 +38,7 @@ public class BattleshipGrid {
 
         //check row
         for (int i = 0; i < size; i++) {
-            if(board[row][column + i].getState().equals("?")){
+            if(board[row][column + i].getType().equals("Square")){
                 checkCount += 1;
             }
         }
@@ -62,7 +62,7 @@ public class BattleshipGrid {
 
         //check column
         for (int i = 0; i < size; i++) {
-            if (board[row + i][column].getState().equals("?")) {
+            if (board[row + i][column].getType().equals("Square")) {
                 checkCount += 1;
             }
         }
@@ -90,5 +90,14 @@ public class BattleshipGrid {
     public BattleshipSquare[][] getBoard() {
         return board;
     }
+
+    public BattleshipSquare getSquare(int row, int column) {
+        return board[row][column];
+    }
+
+    public void setSquare(BattleshipSquare battleshipSquare, int row, int column) {
+        board[row][column] = battleshipSquare;
+    }
+
 
 }

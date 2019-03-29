@@ -6,22 +6,17 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 @Service
 public class BattleshipGame {
 
     private final BattleshipGrid battleshipGrid;
-
     private final BattleshipSquare battleshipSquare;
-
     private final Carrier carrier;
-
     private final Battleship battleship;
-
     private final Cruiser cruiser;
-
     private final Submarine submarine;
-
     private final Destroyer destroyer;
 
     @Autowired
@@ -41,22 +36,44 @@ public class BattleshipGame {
         this.destroyer = destroyer;
     }
 
+    public Carrier getCarrier() {
+        return carrier;
+    }
+
+    public Battleship getBattleship() {
+        return battleship;
+    }
+
+    public Cruiser getCruiser() {
+        return cruiser;
+    }
+
+    public Submarine getSubmarine() {
+        return submarine;
+    }
+
+    public Destroyer getDestroyer() {
+        return destroyer;
+    }
+
     public BattleshipGrid getBattleshipGrid() {
         return battleshipGrid;
     }
 
-    public void addShipsToGrid(BattleshipSquare... ships){
+    public BattleshipGrid addShipsToGrid(BattleshipSquare... ships) {
         battleshipGrid.initialiseGrid();
 
-        for (BattleshipSquare ship:ships) {
+        for (BattleshipSquare ship : ships) {
             battleshipGrid.insertBattleShipIntoRandomPosition(ship);
         }
+
+        return battleshipGrid;
     }
 
     public void hit(int row, int column) {
-        BattleshipSquare squareAimedAt = battleshipGrid.getBoard()[row][column];
+        BattleshipSquare squareAimedAt = battleshipGrid.getSquare(row, column);
         String squareAimedAtType = squareAimedAt.getType();
-        if (squareAimedAtType.equals(carrier.getType())){
+        if (squareAimedAtType.equals(carrier.getType())) {
             changePositionToAHitState(row, column, carrier);
         } else if (squareAimedAtType.equals(battleship.getType())) {
             changePositionToAHitState(row, column, battleship);
@@ -69,7 +86,7 @@ public class BattleshipGame {
         } else if (squareAimedAt.getState().equals("*")) {
             System.out.println("This has already been hit!");
         } else if (squareAimedAt.getState().equals("X")) {
-                System.out.println("This ship has already been destroyed!");
+            System.out.println("This ship has already been destroyed!");
         } else if (squareAimedAtType.equals(battleshipSquare.getType())) {
             System.out.println("Target missed!");
             squareAimedAt.setState("o");
@@ -78,10 +95,10 @@ public class BattleshipGame {
 
     private void changePositionToAHitState(int row, int column, BattleshipSquare ship) {
         System.out.println(ship.getType() + " hit!");
-        battleshipGrid.getBoard()[row][column].minusOneSpaceCount();
-        battleshipGrid.getBoard()[row][column] = new BattleshipSquare();
-        battleshipGrid.getBoard()[row][column].setState("*");
-        battleshipGrid.getBoard()[row][column].setDestroyedType(ship.getType());
+        battleshipGrid.getSquare(row, column).minusOneSpaceCount();
+        battleshipGrid.setSquare(new BattleshipSquare(), row, column);
+        battleshipGrid.getSquare(row, column).setState("*");
+        battleshipGrid.getSquare(row, column).setDestroyedType(ship.getType());
         checkForDestroyedShips(ship);
     }
 
@@ -89,7 +106,7 @@ public class BattleshipGame {
         if (ship.getSpaceCount() == 0) {
             for (int row = 0; row < battleshipGrid.getBoard().length; row++) {
                 for (int column = 0; column < battleshipGrid.getBoard().length; column++) {
-                    BattleshipSquare battleshipSquare = battleshipGrid.getBoard()[row][column];
+                    BattleshipSquare battleshipSquare = battleshipGrid.getSquare(row, column);
 
                     if (battleshipSquare.getDestroyedType().equals(ship.getType())) {
                         battleshipSquare.setState("X");
@@ -100,7 +117,7 @@ public class BattleshipGame {
         }
     }
 
-    public int[] coordinateConverter(String letter, String number) {
+    private int[] coordinateConverter(String letter, String number) {
         char[] letterToCharArray = letter.toCharArray();
         char letterToChar = letterToCharArray[0];
 
@@ -110,52 +127,105 @@ public class BattleshipGame {
         return new int[]{userRowCoordinate, userColumnCoordinate};
     }
 
-    public static void main(String[] args) throws IOException {
-        System.out.println("Welcome to Battleships");
-        System.out.println(" ");
-
-        Carrier carrier = new Carrier();
-        Battleship battleship = new Battleship();
-        Cruiser cruiser = new Cruiser();
-        Submarine submarine = new Submarine();
-        Destroyer destroyer = new Destroyer();
-
-        BattleshipGrid battleshipGrid = new BattleshipGrid();
-        BattleshipSquare battleshipSquare = new BattleshipSquare();
-        BattleshipGame battleshipGame = new BattleshipGame(battleshipGrid,
-                battleshipSquare,
-                carrier,
-                battleship,
-                cruiser,
-                submarine,
-                destroyer);
-        battleshipGame.addShipsToGrid(carrier, battleship, cruiser, submarine, destroyer);
-        battleshipGame.getBattleshipGrid().printGrid();
-
-        while (shipsAreStillSailing(carrier, battleship, cruiser, submarine, destroyer)) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String userInput = br.readLine();
-            String[] userInputArray = userInput.toLowerCase().trim().split("\\s+");
-            String[] methodInputArray = {"", ""};
-
-            System.arraycopy(userInputArray, 0, methodInputArray, 0, userInputArray.length);
-
-            int[] userCoordinates = battleshipGame.coordinateConverter(methodInputArray[0], methodInputArray[1]);
-
-            battleshipGame.hit(userCoordinates[0], userCoordinates[1]);
-            battleshipGame.getBattleshipGrid().printGrid();
-        }
-
-        System.out.println("You win!!");
-
-    }
-
-    private static boolean shipsAreStillSailing(Carrier carrier, Battleship battleship, Cruiser cruiser, Submarine submarine, Destroyer destroyer) {
+    private boolean shipsAreStillSailing(Carrier carrier, Battleship battleship, Cruiser cruiser, Submarine submarine, Destroyer destroyer) {
         return carrier.getSpaceCount() != 0
                 || battleship.getSpaceCount() != 0
                 || cruiser.getSpaceCount() != 0
                 || submarine.getSpaceCount() != 0
                 || destroyer.getSpaceCount() != 0;
+    }
+
+    public static void main(String[] args) throws IOException {
+        System.out.println("Welcome to Battleships");
+        System.out.println("Enter 1p or 2p...");
+
+        Scanner playerInput = new Scanner(System.in);
+        String numberOfPlayers = playerInput.nextLine();
+
+        if (numberOfPlayers.equals("1p")) {
+            Carrier carrier = new Carrier();
+            Battleship battleship = new Battleship();
+            Cruiser cruiser = new Cruiser();
+            Submarine submarine = new Submarine();
+            Destroyer destroyer = new Destroyer();
+
+            BattleshipGrid battleshipGrid = new BattleshipGrid();
+            BattleshipSquare battleshipSquare = new BattleshipSquare();
+            BattleshipGame battleshipGame = new BattleshipGame(battleshipGrid,
+                    battleshipSquare,
+                    carrier,
+                    battleship,
+                    cruiser,
+                    submarine,
+                    destroyer);
+            battleshipGame.addShipsToGrid(carrier, battleship, cruiser, submarine, destroyer);
+
+            while (battleshipGame.shipsAreStillSailing(carrier, battleship, cruiser, submarine, destroyer)) {
+                System.out.println("Ready player One");
+                battleshipGame.getBattleshipGrid().printGrid();
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                String userInput = br.readLine();
+                String[] userInputArray = userInput.toLowerCase().trim().split("");
+                int[] userCoordinates = battleshipGame.coordinateConverter(userInputArray[0], userInputArray[1]);
+                battleshipGame.hit(userCoordinates[0], userCoordinates[1]);
+                System.out.println("-------------------");
+            }
+            System.out.println("You Win!");
+        } else if (numberOfPlayers.equals("2p")) {
+            BattleshipGrid battleshipGridOne = new BattleshipGrid();
+            BattleshipSquare battleshipSquareOne = new BattleshipSquare();
+            Carrier carrierOne = new Carrier();
+            Battleship battleshipOne = new Battleship();
+            Cruiser cruiserOne = new Cruiser();
+            Submarine submarineOne = new Submarine();
+            Destroyer destroyerOne = new Destroyer();
+
+            BattleshipGrid battleshipGridTwo = new BattleshipGrid();
+            BattleshipSquare battleshipSquareTwo = new BattleshipSquare();
+            Carrier carrierTwo = new Carrier();
+            Battleship battleshipTwo = new Battleship();
+            Cruiser cruiserTwo = new Cruiser();
+            Submarine submarineTwo = new Submarine();
+            Destroyer destroyerTwo = new Destroyer();
+
+            BattleshipGame battleshipGameOne = new BattleshipGame(battleshipGridOne, battleshipSquareOne, carrierOne, battleshipOne, cruiserOne, submarineOne, destroyerOne);
+            BattleshipGame battleshipGameTwo = new BattleshipGame(battleshipGridTwo, battleshipSquareTwo, carrierTwo, battleshipTwo, cruiserTwo, submarineTwo, destroyerTwo);
+            TwoPlayerMode twoPlayerMode = new TwoPlayerMode(battleshipGameOne, battleshipGameTwo);
+
+            BattleshipGame playerOneGame = twoPlayerMode.createGameOne();
+            BattleshipGame playerTwoGame = twoPlayerMode.createGameTwo();
+
+            while (playerOneGame.shipsAreStillSailing(playerOneGame.getCarrier(),
+                    playerOneGame.getBattleship(),
+                    playerOneGame.getCruiser(),
+                    playerOneGame.getSubmarine(),
+                    playerOneGame.getDestroyer())) {
+                System.out.println("Ready player One");
+                playerOneGame.getBattleshipGrid().printGrid();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                String userInput = br.readLine();
+                String[] userInputArray = userInput.toLowerCase().trim().split("");
+
+                int[] userCoordinates = playerOneGame.coordinateConverter(userInputArray[0], userInputArray[1]);
+                playerOneGame.hit(userCoordinates[0], userCoordinates[1]);
+                playerOneGame.getBattleshipGrid().printGrid();
+                System.out.println("----------------------------------------------------------------------------- ");
+
+                System.out.println(" ");
+                System.out.println("Ready player Two");
+                playerTwoGame.getBattleshipGrid().printGrid();
+                String userInputTwo = br.readLine();
+                String[] userInputArrayTwo = userInputTwo.toLowerCase().trim().split("");
+                int[] userCoordinatesTwo = playerTwoGame.coordinateConverter(userInputArrayTwo[0], userInputArrayTwo[1]);
+                playerTwoGame.hit(userCoordinatesTwo[0], userCoordinatesTwo[1]);
+                playerTwoGame.getBattleshipGrid().printGrid();
+
+                System.out.println("----------------------------------------------------------------------------- ");
+
+            }
+            System.out.println("You win!!");
+        }
     }
 }
 

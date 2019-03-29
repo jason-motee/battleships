@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class BattleshipSquare {
 
     private final String type = "Square";
-    private String state = "?";
+    private String state = "-";
     private int space = 0;
     private int spaceCount = 0;
     private String destroyedType = "None";

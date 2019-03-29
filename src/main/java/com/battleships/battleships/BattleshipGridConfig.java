@@ -1,6 +1,7 @@
 package com.battleships.battleships;
 
 import org.springframework.context.annotation.Bean;
+import sun.security.krb5.internal.crypto.Des;
 
 public class BattleshipGridConfig {
 
@@ -37,6 +38,12 @@ public class BattleshipGridConfig {
     @Bean
     public BattleshipGrid battleshipGrid() {
         return new BattleshipGrid();
+    }
+
+    @Bean
+    public TwoPlayerMode twoPlayerMode(BattleshipGame battleshipGameOne,
+                                       BattleshipGame battleshipGameTwo) {
+        return new TwoPlayerMode(battleshipGameOne, battleshipGameTwo);
     }
 
     @Bean
