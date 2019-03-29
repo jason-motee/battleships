@@ -1,9 +1,7 @@
 package com.battleships.battleships;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 public class BattleshipGridConfig {
 
     @Bean
@@ -42,7 +40,13 @@ public class BattleshipGridConfig {
     }
 
     @Bean
-    public BattleshipGame battleshipGame(BattleshipGrid battleshipGrid) {
-        return new BattleshipGame(battleshipGrid);
+    public BattleshipGame battleshipGame(BattleshipGrid battleshipGrid,
+                                         BattleshipSquare battleshipSquare,
+                                         Carrier carrier,
+                                         Battleship battleship,
+                                         Cruiser cruiser,
+                                         Submarine submarine,
+                                         Destroyer destroyer) {
+        return new BattleshipGame(battleshipGrid, battleshipSquare, carrier, battleship, cruiser, submarine, destroyer);
     }
 }

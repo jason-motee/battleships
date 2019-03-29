@@ -7,13 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = BattleshipGridConfig.class)
 public class BattleshipGameTest {
@@ -34,15 +27,11 @@ public class BattleshipGameTest {
     private Submarine submarine;
 
     @Autowired
-    private BattleshipGrid battleshipGrid;
-
-    @Autowired
     private BattleshipGame battleshipGame;
 
     @Before
     public void setUp() {
         battleshipGame.addShipsToGrid(carrier, battleship, cruiser, destroyer, submarine);
-
     }
 
     @Test

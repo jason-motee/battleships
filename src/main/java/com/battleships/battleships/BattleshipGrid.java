@@ -1,14 +1,13 @@
 package com.battleships.battleships;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Random;
 
+@Component
 public class BattleshipGrid {
 
     private BattleshipSquare[][] board = new BattleshipSquare[9][9];
-
-    public BattleshipGrid() {
-
-    }
 
     public void initialiseGrid() {
         for (int vertical = 0; vertical < board.length; vertical++) {
@@ -22,7 +21,7 @@ public class BattleshipGrid {
         Random random = new Random();
         int randomNumber = random.nextInt(2);
 
-        if(randomNumber == 0) {
+        if (randomNumber == 0) {
             insertBattleshipIntoRandomRowPosition(battleship);
         } else {
             insertBattleshipIntoRandomColumnPosition(battleship);
@@ -44,7 +43,7 @@ public class BattleshipGrid {
             }
         }
 
-        if(checkCount == size) {
+        if (checkCount == size) {
             for (int i = 0; i < size; i++) {
                 board[row][column + i] = battleship;
             }
@@ -78,12 +77,14 @@ public class BattleshipGrid {
     }
 
     public void printGrid() {
-        for (BattleshipSquare[] square : board) {
-            for (int c = 0; c < board.length; c++) {
-                System.out.print(square[c].getState() + " ");
+        for (int i = 0; i < board.length; i++) {
+            System.out.print(board.length - i + " ");
+            for (int j = 0; j < board.length; j++) {
+                System.out.print(board[i][j].getState() + " ");
             }
-            System.out.println();
+            System.out.println("");
         }
+        System.out.println("  A B C D E F G H I");
     }
 
     public BattleshipSquare[][] getBoard() {

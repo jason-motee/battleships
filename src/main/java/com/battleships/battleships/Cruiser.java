@@ -1,5 +1,8 @@
 package com.battleships.battleships;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Cruiser extends BattleshipSquare{
 
     private final String type = "Cruiser";
