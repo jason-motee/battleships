@@ -60,36 +60,47 @@ public class BattleshipGame {
         return battleshipGrid;
     }
 
-    public BattleshipGrid addShipsToGrid(BattleshipSquare... ships) {
+    public void addShipsToGrid(BattleshipSquare... ships) {
         battleshipGrid.initialiseGrid();
 
         for (BattleshipSquare ship : ships) {
             battleshipGrid.insertBattleShipIntoRandomPosition(ship);
         }
 
-        return battleshipGrid;
     }
 
     public void hit(int row, int column) {
         BattleshipSquare squareAimedAt = battleshipGrid.getSquare(row, column);
         String squareAimedAtType = squareAimedAt.getType();
+
         if (squareAimedAtType.equals(carrier.getType())) {
             changePositionToAHitState(row, column, carrier);
+
         } else if (squareAimedAtType.equals(battleship.getType())) {
             changePositionToAHitState(row, column, battleship);
+
         } else if (squareAimedAtType.equals(cruiser.getType())) {
             changePositionToAHitState(row, column, cruiser);
+
         } else if (squareAimedAtType.equals(submarine.getType())) {
             changePositionToAHitState(row, column, submarine);
+
         } else if (squareAimedAtType.equals(destroyer.getType())) {
             changePositionToAHitState(row, column, destroyer);
+
         } else if (squareAimedAt.getState().equals("*")) {
             System.out.println("This has already been hit!");
+
         } else if (squareAimedAt.getState().equals("X")) {
             System.out.println("This ship has already been destroyed!");
+
+        } else if(squareAimedAt.getState().equals("o")) {
+            System.out.println("You've already tried this coordinate!");
+
         } else if (squareAimedAtType.equals(battleshipSquare.getType())) {
             System.out.println("Target missed!");
             squareAimedAt.setState("o");
+
         }
     }
 
@@ -118,10 +129,7 @@ public class BattleshipGame {
     }
 
     private int[] coordinateConverter(String letter, String number) {
-        char[] letterToCharArray = letter.toCharArray();
-        char letterToChar = letterToCharArray[0];
-
-        int userColumnCoordinate = letterToChar - 'a';
+        int userColumnCoordinate = letter.charAt(0) - 'a';
         int userRowCoordinate = battleshipGrid.getBoard().length - Integer.parseInt(number);
 
         return new int[]{userRowCoordinate, userColumnCoordinate};
@@ -171,7 +179,13 @@ public class BattleshipGame {
                 System.out.println("-------------------");
             }
             System.out.println("You Win!");
+
         } else if (numberOfPlayers.equals("2p")) {
+            System.out.println("Enter player 1 name...");
+            String playerOneName = playerInput.nextLine();
+            System.out.println("Enter player 2 name...");
+            String playerTwoName = playerInput.nextLine();
+
             BattleshipGrid battleshipGridOne = new BattleshipGrid();
             BattleshipSquare battleshipSquareOne = new BattleshipSquare();
             Carrier carrierOne = new Carrier();
@@ -194,38 +208,57 @@ public class BattleshipGame {
 
             BattleshipGame playerOneGame = twoPlayerMode.createGameOne();
             BattleshipGame playerTwoGame = twoPlayerMode.createGameTwo();
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-            while (playerOneGame.shipsAreStillSailing(playerOneGame.getCarrier(),
-                    playerOneGame.getBattleship(),
-                    playerOneGame.getCruiser(),
-                    playerOneGame.getSubmarine(),
-                    playerOneGame.getDestroyer())) {
-                System.out.println("Ready player One");
+            String winnerName = "";
+
+            while (true) {
+                System.out.println("Ready up " + playerOneName);
                 playerOneGame.getBattleshipGrid().printGrid();
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 String userInput = br.readLine();
                 String[] userInputArray = userInput.toLowerCase().trim().split("");
 
-                int[] userCoordinates = playerOneGame.coordinateConverter(userInputArray[0], userInputArray[1]);
-                playerOneGame.hit(userCoordinates[0], userCoordinates[1]);
-                playerOneGame.getBattleshipGrid().printGrid();
+                playerOneGame.processUserInput(playerOneGame, userInputArray);
+
+                if (!playerOneGame.shipsAreStillSailing(playerOneGame.getCarrier(),
+                        playerOneGame.getBattleship(),
+                        playerOneGame.getCruiser(),
+                        playerOneGame.getSubmarine(),
+                        playerOneGame.getDestroyer())) {
+                    winnerName = playerOneName;
+                    break;
+                }
+
                 System.out.println("----------------------------------------------------------------------------- ");
 
                 System.out.println(" ");
-                System.out.println("Ready player Two");
+                System.out.println("Ready up " + playerTwoName);
                 playerTwoGame.getBattleshipGrid().printGrid();
+
                 String userInputTwo = br.readLine();
                 String[] userInputArrayTwo = userInputTwo.toLowerCase().trim().split("");
-                int[] userCoordinatesTwo = playerTwoGame.coordinateConverter(userInputArrayTwo[0], userInputArrayTwo[1]);
-                playerTwoGame.hit(userCoordinatesTwo[0], userCoordinatesTwo[1]);
-                playerTwoGame.getBattleshipGrid().printGrid();
+
+                playerTwoGame.processUserInput(playerTwoGame, userInputArrayTwo);
+
+                if (!playerTwoGame.shipsAreStillSailing(playerTwoGame.getCarrier(),
+                        playerTwoGame.getBattleship(),
+                        playerTwoGame.getCruiser(),
+                        playerTwoGame.getSubmarine(),
+                        playerTwoGame.getDestroyer())) {
+                    winnerName = playerTwoName;
+                    break;
+                }
 
                 System.out.println("----------------------------------------------------------------------------- ");
-
             }
-            System.out.println("You win!!");
+            System.out.println(winnerName + " wins!");
         }
     }
-}
 
+    private void processUserInput(BattleshipGame playerOneGame, String[] userInputArray) {
+        int[] userCoordinates = playerOneGame.coordinateConverter(userInputArray[0], userInputArray[1]);
+        playerOneGame.hit(userCoordinates[0], userCoordinates[1]);
+        playerOneGame.getBattleshipGrid().printGrid();
+    }
+}

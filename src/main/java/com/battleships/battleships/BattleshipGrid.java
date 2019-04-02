@@ -10,9 +10,9 @@ public class BattleshipGrid {
     private BattleshipSquare[][] board = new BattleshipSquare[9][9];
 
     public void initialiseGrid() {
-        for (int vertical = 0; vertical < board.length; vertical++) {
-            for (int horizontal = 0; horizontal < board.length; horizontal++) {
-               board[vertical][horizontal] = new BattleshipSquare();
+        for (int row = 0; row < board.length; row++) {
+            for (int column = 0; column < board.length; column++) {
+                setSquare(new BattleshipSquare(), row, column);
             }
         }
     }
@@ -36,16 +36,15 @@ public class BattleshipGrid {
 
         int checkCount = 0;
 
-        //check row
         for (int i = 0; i < size; i++) {
-            if(board[row][column + i].getType().equals("Square")){
+            if(getSquare(row, column + i).getType().equals("Square")){
                 checkCount += 1;
             }
         }
 
         if (checkCount == size) {
             for (int i = 0; i < size; i++) {
-                board[row][column + i] = battleship;
+                setSquare(battleship, row, column + i);
             }
         } else {
             this.insertBattleshipIntoRandomRowPosition(battleship);
@@ -60,16 +59,15 @@ public class BattleshipGrid {
 
         int checkCount = 0;
 
-        //check column
         for (int i = 0; i < size; i++) {
-            if (board[row + i][column].getType().equals("Square")) {
+            if (getSquare(row + i, column).getType().equals("Square")) {
                 checkCount += 1;
             }
         }
 
         if (checkCount == size) {
             for (int i = 0; i < size; i++) {
-                board[row + i][column] = battleship;
+                setSquare(battleship, row + i, column);
             }
         } else {
             this.insertBattleshipIntoRandomColumnPosition(battleship);
@@ -77,10 +75,10 @@ public class BattleshipGrid {
     }
 
     public void printGrid() {
-        for (int i = 0; i < board.length; i++) {
-            System.out.print(board.length - i + " ");
-            for (int j = 0; j < board.length; j++) {
-                System.out.print(board[i][j].getState() + " ");
+        for (int row = 0; row < board.length; row++) {
+            System.out.print(board.length - row + " ");
+            for (int column = 0; column < board.length; column++) {
+                System.out.print(getSquare(row, column).getState() + " ");
             }
             System.out.println("");
         }
@@ -98,6 +96,4 @@ public class BattleshipGrid {
     public void setSquare(BattleshipSquare battleshipSquare, int row, int column) {
         board[row][column] = battleshipSquare;
     }
-
-
 }
