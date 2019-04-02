@@ -19,6 +19,8 @@ public class BattleshipGame {
     private final Submarine submarine;
     private final Destroyer destroyer;
 
+    private static Scanner playerInput = new Scanner(System.in);
+
     @Autowired
     public BattleshipGame(BattleshipGrid battleshipGrid,
                           BattleshipSquare battleshipSquare,
@@ -143,11 +145,17 @@ public class BattleshipGame {
                 || destroyer.getSpaceCount() != 0;
     }
 
+    private void processUserInput(BattleshipGame playerOneGame, String[] userInputArray) {
+        int[] userCoordinates = playerOneGame.coordinateConverter(userInputArray[0], userInputArray[1]);
+        playerOneGame.hit(userCoordinates[0], userCoordinates[1]);
+        playerOneGame.getBattleshipGrid().printGrid();
+    }
+
     public static void main(String[] args) throws IOException {
         System.out.println("Welcome to Battleships");
         System.out.println("Enter 1p or 2p...");
 
-        Scanner playerInput = new Scanner(System.in);
+
         String numberOfPlayers = playerInput.nextLine();
 
         if (numberOfPlayers.equals("1p")) {
@@ -181,84 +189,81 @@ public class BattleshipGame {
             System.out.println("You Win!");
 
         } else if (numberOfPlayers.equals("2p")) {
-            System.out.println("Enter player 1 name...");
-            String playerOneName = playerInput.nextLine();
-            System.out.println("Enter player 2 name...");
-            String playerTwoName = playerInput.nextLine();
 
-            BattleshipGrid battleshipGridOne = new BattleshipGrid();
-            BattleshipSquare battleshipSquareOne = new BattleshipSquare();
-            Carrier carrierOne = new Carrier();
-            Battleship battleshipOne = new Battleship();
-            Cruiser cruiserOne = new Cruiser();
-            Submarine submarineOne = new Submarine();
-            Destroyer destroyerOne = new Destroyer();
+            startTwoPlayerGame(playerInput);
 
-            BattleshipGrid battleshipGridTwo = new BattleshipGrid();
-            BattleshipSquare battleshipSquareTwo = new BattleshipSquare();
-            Carrier carrierTwo = new Carrier();
-            Battleship battleshipTwo = new Battleship();
-            Cruiser cruiserTwo = new Cruiser();
-            Submarine submarineTwo = new Submarine();
-            Destroyer destroyerTwo = new Destroyer();
-
-            BattleshipGame battleshipGameOne = new BattleshipGame(battleshipGridOne, battleshipSquareOne, carrierOne, battleshipOne, cruiserOne, submarineOne, destroyerOne);
-            BattleshipGame battleshipGameTwo = new BattleshipGame(battleshipGridTwo, battleshipSquareTwo, carrierTwo, battleshipTwo, cruiserTwo, submarineTwo, destroyerTwo);
-            TwoPlayerMode twoPlayerMode = new TwoPlayerMode(battleshipGameOne, battleshipGameTwo);
-
-            BattleshipGame playerOneGame = twoPlayerMode.createGameOne();
-            BattleshipGame playerTwoGame = twoPlayerMode.createGameTwo();
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-            String winnerName = "";
-
-            while (true) {
-                System.out.println("Ready up " + playerOneName);
-                playerOneGame.getBattleshipGrid().printGrid();
-
-                String userInput = br.readLine();
-                String[] userInputArray = userInput.toLowerCase().trim().split("");
-
-                playerOneGame.processUserInput(playerOneGame, userInputArray);
-
-                if (!playerOneGame.shipsAreStillSailing(playerOneGame.getCarrier(),
-                        playerOneGame.getBattleship(),
-                        playerOneGame.getCruiser(),
-                        playerOneGame.getSubmarine(),
-                        playerOneGame.getDestroyer())) {
-                    winnerName = playerOneName;
-                    break;
-                }
-
-                System.out.println("----------------------------------------------------------------------------- ");
-
-                System.out.println(" ");
-                System.out.println("Ready up " + playerTwoName);
-                playerTwoGame.getBattleshipGrid().printGrid();
-
-                String userInputTwo = br.readLine();
-                String[] userInputArrayTwo = userInputTwo.toLowerCase().trim().split("");
-
-                playerTwoGame.processUserInput(playerTwoGame, userInputArrayTwo);
-
-                if (!playerTwoGame.shipsAreStillSailing(playerTwoGame.getCarrier(),
-                        playerTwoGame.getBattleship(),
-                        playerTwoGame.getCruiser(),
-                        playerTwoGame.getSubmarine(),
-                        playerTwoGame.getDestroyer())) {
-                    winnerName = playerTwoName;
-                    break;
-                }
-
-                System.out.println("----------------------------------------------------------------------------- ");
-            }
-            System.out.println(winnerName + " wins!");
         }
     }
 
-    private void processUserInput(BattleshipGame playerOneGame, String[] userInputArray) {
-        int[] userCoordinates = playerOneGame.coordinateConverter(userInputArray[0], userInputArray[1]);
-        playerOneGame.hit(userCoordinates[0], userCoordinates[1]);
-        playerOneGame.getBattleshipGrid().printGrid();
+    private static void startTwoPlayerGame(Scanner playerInput) throws IOException {
+        System.out.println("Enter player 1 name...");
+        String playerOneName = playerInput.nextLine();
+        System.out.println("Enter player 2 name...");
+        String playerTwoName = playerInput.nextLine();
+
+        BattleshipGame battleshipGameOne = getBattleshipGame();
+        BattleshipGame battleshipGameTwo = getBattleshipGame();
+        TwoPlayerMode twoPlayerMode = new TwoPlayerMode(battleshipGameOne, battleshipGameTwo);
+
+        BattleshipGame playerOneGame = twoPlayerMode.createGameOne();
+        BattleshipGame playerTwoGame = twoPlayerMode.createGameTwo();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        String winnerName;
+
+        while (true) {
+            System.out.println("Ready up " + playerOneName);
+            playerOneGame.getBattleshipGrid().printGrid();
+
+            String userInput = br.readLine();
+            String[] userInputArray = userInput.toLowerCase().trim().split("");
+
+            playerOneGame.processUserInput(playerOneGame, userInputArray);
+
+            if (!playerOneGame.shipsAreStillSailing(playerOneGame.getCarrier(),
+                    playerOneGame.getBattleship(),
+                    playerOneGame.getCruiser(),
+                    playerOneGame.getSubmarine(),
+                    playerOneGame.getDestroyer())) {
+                winnerName = playerOneName;
+                break;
+            }
+
+            System.out.println("----------------------------------------------------------------------------- ");
+
+            System.out.println(" ");
+            System.out.println("Ready up " + playerTwoName);
+            playerTwoGame.getBattleshipGrid().printGrid();
+
+            String userInputTwo = br.readLine();
+            String[] userInputArrayTwo = userInputTwo.toLowerCase().trim().split("");
+
+            playerTwoGame.processUserInput(playerTwoGame, userInputArrayTwo);
+
+            if (!playerTwoGame.shipsAreStillSailing(playerTwoGame.getCarrier(),
+                    playerTwoGame.getBattleship(),
+                    playerTwoGame.getCruiser(),
+                    playerTwoGame.getSubmarine(),
+                    playerTwoGame.getDestroyer())) {
+                winnerName = playerTwoName;
+                break;
+            }
+
+            System.out.println("----------------------------------------------------------------------------- ");
+        }
+        System.out.println(winnerName + " wins!");
     }
+
+    private static BattleshipGame getBattleshipGame() {
+        BattleshipGrid battleshipGrid = new BattleshipGrid();
+        BattleshipSquare battleshipSquare = new BattleshipSquare();
+        Carrier carrier = new Carrier();
+        Battleship battleship = new Battleship();
+        Cruiser cruiser = new Cruiser();
+        Submarine submarine = new Submarine();
+        Destroyer destroyer = new Destroyer();
+        return new BattleshipGame(battleshipGrid, battleshipSquare, carrier, battleship, cruiser, submarine, destroyer);
+    }
+
+
 }
