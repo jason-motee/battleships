@@ -79,8 +79,6 @@ public class BattleshipGridTest {
     @Test
     public void checkGridForSubmarine() {
         battleshipGrid.insertBattleshipIntoRandomRowPosition(submarine);
-        battleshipGrid.printGrid();
-
         List<BattleshipSquare> battleshipSquaresList = getBattleshipSquaresList(submarine.getType());
 
         assertThat(battleshipSquaresList.size()).isEqualTo(3);

@@ -44,7 +44,15 @@ public class BattleshipBoardTest {
 
     @Autowired
     @Qualifier("boardOne")
-    private BattleshipBoard battleshipBoard;
+    private BattleshipBoard battleshipBoardOne;
+
+    @Autowired
+    @Qualifier("boardTwo")
+    private BattleshipBoard battleshipBoardTwo;
+
+    @Autowired
+    @Qualifier("battleshipTwo")
+    private Battleship battleshipTwo;
 
     @Before
     public void setUp() {
@@ -53,8 +61,8 @@ public class BattleshipBoardTest {
 
     @Test
     public void addShipsToGameAndCheckTheGrid() {
-        battleshipBoard.addShipsToGrid(carrier, battleship, cruiser, destroyer, submarine);
-        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipBoard.getBattleshipGrid().getBoard())
+        battleshipBoardOne.addShipsToGrid(carrier, battleship, cruiser, destroyer, submarine);
+        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipBoardOne.getBattleshipGrid().getBoard())
                 .flatMap(Arrays::stream)
                 .collect(Collectors.toList());
 
@@ -62,11 +70,11 @@ public class BattleshipBoardTest {
     }
 
     @Test
-    public void givenAnEmptySpaceIsHit_ThenTheGridContainsMissedValue () {
-        battleshipBoard.addShipsToGrid();
-        battleshipBoard.hit(0,0);
+    public void givenAnEmptySpaceIsHit_ThenTheGridContainsMissedValue() {
+        battleshipBoardOne.addShipsToGrid();
+        battleshipBoardOne.hit(0, 0);
 
-        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipBoard.getBattleshipGrid().getBoard())
+        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipBoardOne.getBattleshipGrid().getBoard())
                 .flatMap(Arrays::stream)
                 .collect(Collectors.toList());
 
@@ -75,15 +83,16 @@ public class BattleshipBoardTest {
 
     @Test
     public void givenASpaceContainingCarrierIsHit_ThenTheGridContainsAHitValue() {
-        battleshipBoard.addShipsToGrid(carrier);
+        battleshipBoardOne.addShipsToGrid(carrier);
 
         int row = 0;
         int column = 0;
 
-        Outer: for (int i = 0; i < battleshipBoard.getBattleshipGrid().getBoard().length; i++) {
-            for (int j = 0; j < battleshipBoard.getBattleshipGrid().getBoard().length; j++) {
-                if (battleshipBoard.getBattleshipGrid().getSquare(i, j).getType().equals(carrier.getType())) {
-                    battleshipBoard.hit(i, j);
+        Outer:
+        for (int i = 0; i < battleshipBoardOne.getBattleshipGrid().getBoard().length; i++) {
+            for (int j = 0; j < battleshipBoardOne.getBattleshipGrid().getBoard().length; j++) {
+                if (battleshipBoardOne.getBattleshipGrid().getSquare(i, j).getType().equals(carrier.getType())) {
+                    battleshipBoardOne.hit(i, j);
                     row = i;
                     column = j;
                     break Outer;
@@ -91,22 +100,22 @@ public class BattleshipBoardTest {
             }
         }
 
-        assertThat(battleshipBoard.getBattleshipGrid().getBoard()[row][column].getState()).isEqualTo("*");
+        assertThat(battleshipBoardOne.getBattleshipGrid().getSquare(row, column).getState()).isEqualTo("*");
     }
 
     @Test
     public void givenAllSpacesContainingBattleshipIsHit_ThenTheGridContainsFourDestroyedValues() {
-        battleshipBoard.addShipsToGrid(battleship);
+        battleshipBoardTwo.addShipsToGrid(battleshipTwo);
 
-        for (int row = 0; row < battleshipBoard.getBattleshipGrid().getBoard().length; row++) {
-            for (int column = 0; column < battleshipBoard.getBattleshipGrid().getBoard().length; column++) {
-                if (battleshipBoard.getBattleshipGrid().getSquare(row, column).getType().equals(battleship.getType())) {
-                    battleshipBoard.hit(row, column);
+        for (int row = 0; row < battleshipBoardTwo.getBattleshipGrid().getBoard().length; row++) {
+            for (int column = 0; column < battleshipBoardTwo.getBattleshipGrid().getBoard().length; column++) {
+                if (battleshipBoardTwo.getBattleshipGrid().getSquare(row, column).getType().equals(battleshipTwo.getType())) {
+                    battleshipBoardTwo.hit(row, column);
                 }
             }
         }
 
-        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipBoard.getBattleshipGrid().getBoard())
+        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipBoardTwo.getBattleshipGrid().getBoard())
                 .flatMap(Arrays::stream)
                 .filter(square -> square.getState().equals("X"))
                 .collect(Collectors.toList());
@@ -119,7 +128,19 @@ public class BattleshipBoardTest {
 
     @Test
     public void givenAllSpacesContainingAnyShipIsHit_ThenTheGameEnds() {
+        battleshipBoardOne.addShipsToGrid(carrier, battleship, cruiser, submarine, destroyer);
 
+        for (int row = 0; row < battleshipBoardOne.getBattleshipGrid().getBoard().length; row++) {
+            for (int column = 0; column < battleshipBoardOne.getBattleshipGrid().getBoard().length; column++) {
+                if (battleshipBoardOne.getBattleshipGrid().getSquare(row, column).getType().equals(carrier.getType())
+                        || battleshipBoardOne.getBattleshipGrid().getSquare(row, column).getType().equals(battleship.getType())
+                        || battleshipBoardOne.getBattleshipGrid().getSquare(row, column).getType().equals(submarine.getType())
+                        || battleshipBoardOne.getBattleshipGrid().getSquare(row, column).getType().equals(cruiser.getType())
+                        || battleshipBoardOne.getBattleshipGrid().getSquare(row, column).getType().equals(destroyer.getType())) {
+                    battleshipBoardOne.hit(row, column);
+                }
+            }
+        }
+        assertThat(battleshipBoardOne.allShipsHaveSunk(carrier, battleship, cruiser, submarine, destroyer)).isEqualTo(true);
     }
-
 }

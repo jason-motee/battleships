@@ -129,7 +129,6 @@ public class BattleshipGame {
             System.out.println(computerGame.getCruiser().getSpaceCount());
         }
         System.out.println(winnerName + " wins!");
-
     }
 
     private String[] promptUserForInput(String playerName, BattleshipBoard playerGame, BufferedReader br) throws IOException {
@@ -139,4 +138,6 @@ public class BattleshipGame {
         String userInput = br.readLine();
         return userInput.toLowerCase().trim().split("");
     }
+
+
 }

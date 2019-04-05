@@ -118,11 +118,11 @@ public class BattleshipBoard {
         }
     }
 
-    public int[] coordinateConverter(String letter, String number) {
+    private int[] coordinateConverter(String letter, String number) {
         int userColumnCoordinate = letter.charAt(0) - 'a';
         int userRowCoordinate = battleshipGrid.getBoard().length - Integer.parseInt(number);
 
-        return new int[]{userRowCoordinate, userColumnCoordinate};
+        return new int[] {userRowCoordinate, userColumnCoordinate};
     }
 
     public boolean allShipsHaveSunk(Carrier carrier, Battleship battleship, Cruiser cruiser, Submarine submarine, Destroyer destroyer) {
