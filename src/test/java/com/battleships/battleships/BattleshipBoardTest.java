@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = BattleshipGridConfig.class)
-public class BattleshipGameTest {
+public class BattleshipBoardTest {
 
     @Autowired
     private BattleshipSquare battleshipSquare;
@@ -36,7 +36,7 @@ public class BattleshipGameTest {
     private Submarine submarine;
 
     @Autowired
-    private BattleshipGame battleshipGame;
+    private BattleshipBoard battleshipBoard;
 
     @Before
     public void setUp() {
@@ -45,8 +45,8 @@ public class BattleshipGameTest {
 
     @Test
     public void addShipsToGameAndCheckTheGrid() {
-        battleshipGame.addShipsToGrid(carrier, battleship, cruiser, destroyer, submarine);
-        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipGame.getBattleshipGrid().getBoard())
+        battleshipBoard.addShipsToGrid(carrier, battleship, cruiser, destroyer, submarine);
+        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipBoard.getBattleshipGrid().getBoard())
                 .flatMap(Arrays::stream)
                 .collect(Collectors.toList());
 
@@ -55,10 +55,10 @@ public class BattleshipGameTest {
 
     @Test
     public void givenAnEmptySpaceIsHit_ThenTheGridContainsMissedValue () {
-        battleshipGame.addShipsToGrid();
-        battleshipGame.hit(0,0);
+        battleshipBoard.addShipsToGrid();
+        battleshipBoard.hit(0,0);
 
-        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipGame.getBattleshipGrid().getBoard())
+        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipBoard.getBattleshipGrid().getBoard())
                 .flatMap(Arrays::stream)
                 .collect(Collectors.toList());
 
@@ -67,15 +67,15 @@ public class BattleshipGameTest {
 
     @Test
     public void givenASpaceContainingCarrierIsHit_ThenTheGridContainsAHitValue() {
-        battleshipGame.addShipsToGrid(carrier);
+        battleshipBoard.addShipsToGrid(carrier);
 
         int row = 0;
         int column = 0;
 
-        Outer: for (int i = 0; i < battleshipGame.getBattleshipGrid().getBoard().length; i++) {
-            for (int j = 0; j < battleshipGame.getBattleshipGrid().getBoard().length; j++) {
-                if (battleshipGame.getBattleshipGrid().getSquare(i, j).getType().equals(carrier.getType())) {
-                    battleshipGame.hit(i, j);
+        Outer: for (int i = 0; i < battleshipBoard.getBattleshipGrid().getBoard().length; i++) {
+            for (int j = 0; j < battleshipBoard.getBattleshipGrid().getBoard().length; j++) {
+                if (battleshipBoard.getBattleshipGrid().getSquare(i, j).getType().equals(carrier.getType())) {
+                    battleshipBoard.hit(i, j);
                     row = i;
                     column = j;
                     break Outer;
@@ -83,22 +83,22 @@ public class BattleshipGameTest {
             }
         }
 
-        assertThat(battleshipGame.getBattleshipGrid().getBoard()[row][column].getState()).isEqualTo("*");
+        assertThat(battleshipBoard.getBattleshipGrid().getBoard()[row][column].getState()).isEqualTo("*");
     }
 
     @Test
     public void givenAllSpacesContainingBattleshipIsHit_ThenTheGridContainsFourDestroyedValues() {
-        battleshipGame.addShipsToGrid(battleship);
+        battleshipBoard.addShipsToGrid(battleship);
 
-        for (int row = 0; row < battleshipGame.getBattleshipGrid().getBoard().length; row++) {
-            for (int column = 0; column < battleshipGame.getBattleshipGrid().getBoard().length; column++) {
-                if (battleshipGame.getBattleshipGrid().getSquare(row, column).getType().equals(battleship.getType())) {
-                    battleshipGame.hit(row, column);
+        for (int row = 0; row < battleshipBoard.getBattleshipGrid().getBoard().length; row++) {
+            for (int column = 0; column < battleshipBoard.getBattleshipGrid().getBoard().length; column++) {
+                if (battleshipBoard.getBattleshipGrid().getSquare(row, column).getType().equals(battleship.getType())) {
+                    battleshipBoard.hit(row, column);
                 }
             }
         }
 
-        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipGame.getBattleshipGrid().getBoard())
+        List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipBoard.getBattleshipGrid().getBoard())
                 .flatMap(Arrays::stream)
                 .filter(square -> square.getState().equals("X"))
                 .collect(Collectors.toList());

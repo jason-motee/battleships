@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
-@Component
 public class BattleshipGrid {
 
     private BattleshipSquare[][] board = new BattleshipSquare[9][9];
