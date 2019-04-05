@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -18,24 +19,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BattleshipBoardTest {
 
     @Autowired
+    @Qualifier("battleshipSquareOne")
     private BattleshipSquare battleshipSquare;
 
     @Autowired
+    @Qualifier("carrierOne")
     private Carrier carrier;
 
     @Autowired
+    @Qualifier("battleshipOne")
     private Battleship battleship;
 
     @Autowired
+    @Qualifier("cruiserOne")
     private Cruiser cruiser;
 
     @Autowired
+    @Qualifier("destroyerOne")
     private Destroyer destroyer;
 
     @Autowired
+    @Qualifier("submarineOne")
     private Submarine submarine;
 
     @Autowired
+    @Qualifier("boardOne")
     private BattleshipBoard battleshipBoard;
 
     @Before
