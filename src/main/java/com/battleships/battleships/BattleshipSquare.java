@@ -2,11 +2,21 @@ package com.battleships.battleships;
 
 public class BattleshipSquare {
 
-    private final String type = "Square";
+    private String type = "Square";
     private String state = "-";
     private int space = 0;
     private int spaceCount = 0;
     private String destroyedType = "None";
+
+    public BattleshipSquare() {
+    }
+
+    public BattleshipSquare(String type, String state, int space, int spaceCount) {
+        this.type = type;
+        this.state = state;
+        this.space = space;
+        this.spaceCount = spaceCount;
+    }
 
     public String getType() {
         return type;
@@ -38,5 +48,9 @@ public class BattleshipSquare {
 
     public void setDestroyedType(String destroyedType) {
         this.destroyedType = destroyedType;
+    }
+
+    public void hideState() {
+        setState("-");
     }
 }
