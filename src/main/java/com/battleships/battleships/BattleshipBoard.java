@@ -56,55 +56,16 @@ public class BattleshipBoard {
         for (BattleshipSquare ship : ships) {
             battleshipGrid.insertBattleShipIntoRandomPosition(ship);
         }
-
     }
 
-    public void hit(int row, int column) {
+    public void applyCoordinates(int row, int column) {
         BattleshipSquare squareAimedAt = battleshipGrid.getSquare(row, column);
-        String squareAimedAtType = squareAimedAt.getType();
-
-        if (squareAimedAtType.equals(carrier.getType())) {
-            changePositionToAHitState(row, column, carrier);
-
-        } else if (squareAimedAtType.equals(battleship.getType())) {
-            changePositionToAHitState(row, column, battleship);
-
-        } else if (squareAimedAtType.equals(cruiser.getType())) {
-            changePositionToAHitState(row, column, cruiser);
-
-        } else if (squareAimedAtType.equals(submarine.getType())) {
-            changePositionToAHitState(row, column, submarine);
-
-        } else if (squareAimedAtType.equals(destroyer.getType())) {
-            changePositionToAHitState(row, column, destroyer);
-
-        } else if (squareAimedAt.getState().equals("*")) {
-            System.out.println("This has already been hit!");
-
-        } else if (squareAimedAt.getState().equals("X")) {
-            System.out.println("This ship has already been destroyed!");
-
-        } else if (squareAimedAt.getState().equals("o")) {
-            System.out.println("You've already tried this coordinate!");
-
-        } else if (squareAimedAtType.equals(battleshipSquare.getType())) {
-            System.out.println("Target missed!");
-            squareAimedAt.setState("o");
-
-        }
-    }
-
-    private void changePositionToAHitState(int row, int column, BattleshipSquare ship) {
-        System.out.println(ship.getType() + " hit!");
-        battleshipGrid.getSquare(row, column).minusOneSpaceCount();
-        battleshipGrid.setSquare(new BattleshipSquare(), row, column);
-        battleshipGrid.getSquare(row, column).setState("*");
-        battleshipGrid.getSquare(row, column).setDestroyedType(ship.getType());
-        checkForDestroyedShips(ship);
+        battleshipGrid.setSquare(squareAimedAt.hit(), row, column);
+        checkForDestroyedShips(squareAimedAt);
     }
 
     private void checkForDestroyedShips(BattleshipSquare ship) {
-        if (ship.getSpaceCount() == 0) {
+        if (ship.getSpaceCount() == 0 && !ship.getType().equals("Empty Square")) {
             for (int row = 0; row < battleshipGrid.getBoard().length; row++) {
                 for (int column = 0; column < battleshipGrid.getBoard().length; column++) {
                     BattleshipSquare battleshipSquare = battleshipGrid.getSquare(row, column);
@@ -116,6 +77,12 @@ public class BattleshipBoard {
             }
             System.out.println("You sunk a " + ship.getType() + "!");
         }
+    }
+
+    public void processUserInput(BattleshipBoard game, String[] userInputArray) {
+        int[] userCoordinates = game.coordinateConverter(userInputArray[0], userInputArray[1]);
+        game.applyCoordinates(userCoordinates[0], userCoordinates[1]);
+        game.getBattleshipGrid().printGrid();
     }
 
     private int[] coordinateConverter(String letter, String number) {
@@ -133,9 +100,13 @@ public class BattleshipBoard {
                 && destroyer.getSpaceCount() == 0;
     }
 
-    public void processUserInput(BattleshipBoard playerOneGame, String[] userInputArray) {
-        int[] userCoordinates = playerOneGame.coordinateConverter(userInputArray[0], userInputArray[1]);
-        playerOneGame.hit(userCoordinates[0], userCoordinates[1]);
-        playerOneGame.getBattleshipGrid().printGrid();
+    public void hideShips(boolean isHidden) {
+        if(isHidden) {
+            carrier.hideState();
+            battleship.hideState();
+            cruiser.hideState();
+            submarine.hideState();
+            destroyer.hideState();
+        }
     }
 }

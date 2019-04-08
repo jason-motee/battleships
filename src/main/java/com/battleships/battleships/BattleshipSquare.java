@@ -2,13 +2,14 @@ package com.battleships.battleships;
 
 public class BattleshipSquare {
 
-    private String type = "Square";
-    private String state = "-";
-    private int space = 0;
-    private int spaceCount = 0;
+    private String type;
+    private String state;
+    private int space;
+    private int spaceCount;
     private String destroyedType = "None";
 
     public BattleshipSquare() {
+        this("Empty Square", "-", 0, 0);
     }
 
     public BattleshipSquare(String type, String state, int space, int spaceCount) {
@@ -48,6 +49,23 @@ public class BattleshipSquare {
 
     public void setDestroyedType(String destroyedType) {
         this.destroyedType = destroyedType;
+    }
+
+    public BattleshipSquare hit() {
+        if(!this.getType().equals("Empty Square")) {
+            System.out.println(this.getType() + " hit!");
+            this.spaceCount -= 1;
+            BattleshipSquare battleshipSquare = new BattleshipSquare();
+            battleshipSquare.setState("*");
+            battleshipSquare.setDestroyedType(this.getType());
+            return battleshipSquare;
+        } else if (this.getDestroyedType().equals("None")){
+            System.out.println("Target missed!");
+            BattleshipSquare battleshipSquare = this;
+            battleshipSquare.setState("o");
+            return this;
+        }
+        return this;
     }
 
     public void hideState() {
