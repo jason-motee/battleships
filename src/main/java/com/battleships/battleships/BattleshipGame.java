@@ -1,7 +1,5 @@
 package com.battleships.battleships;
 
-import org.springframework.stereotype.Component;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,10 +9,14 @@ public class BattleshipGame {
 
     private BattleshipBoard battleshipBoardOne;
     private BattleshipBoard battleshipBoardTwo;
+    private ComputerPlayer computerPlayer;
 
-    public BattleshipGame(BattleshipBoard battleshipBoardOne, BattleshipBoard battleshipBoardTwo) {
+    public BattleshipGame(BattleshipBoard battleshipBoardOne,
+                          BattleshipBoard battleshipBoardTwo,
+                          ComputerPlayer computerPlayer) {
         this.battleshipBoardOne = battleshipBoardOne;
         this.battleshipBoardTwo = battleshipBoardTwo;
+        this.computerPlayer = computerPlayer;
     }
 
     public  void startTwoPlayerGame(Scanner playerInput) throws IOException {
@@ -23,18 +25,20 @@ public class BattleshipGame {
         System.out.println("Enter player 2 name...");
         String playerTwoName = playerInput.nextLine();
 
+
         battleshipBoardOne.addShipsToGrid(battleshipBoardOne.getCarrier(),
                 battleshipBoardOne.getBattleship(),
                 battleshipBoardOne.getCruiser(),
                 battleshipBoardOne.getSubmarine(),
                 battleshipBoardOne.getDestroyer());
+        battleshipBoardOne.hideShips(false);
 
         battleshipBoardTwo.addShipsToGrid(battleshipBoardTwo.getCarrier(),
                 battleshipBoardTwo.getBattleship(),
                 battleshipBoardTwo.getCruiser(),
                 battleshipBoardTwo.getSubmarine(),
                 battleshipBoardTwo.getDestroyer());
-
+        battleshipBoardTwo.hideShips(false);
 
         BattleshipBoard playerOneGame = battleshipBoardOne;
         BattleshipBoard playerTwoGame = battleshipBoardTwo;
@@ -69,8 +73,6 @@ public class BattleshipGame {
             }
 
             System.out.println("-------------------");
-            System.out.println(playerOneGame.getCruiser().getSpaceCount());
-            System.out.println(playerTwoGame.getCruiser().getSpaceCount());
         }
         System.out.println(winnerName + " wins!");
     }
@@ -78,6 +80,7 @@ public class BattleshipGame {
     public void startOnePlayerGame(Scanner playerInput) throws IOException {
         System.out.println("Enter player 1 name...");
         String playerOneName = playerInput.nextLine();
+        String computerName = "Computer";
 
         battleshipBoardOne.addShipsToGrid(battleshipBoardOne.getCarrier(),
                 battleshipBoardOne.getBattleship(),
@@ -110,23 +113,20 @@ public class BattleshipGame {
                 break;
             }
 
-//            System.out.println("-------------------");
-//            String[] userInputArrayTwo = promptUserForInput(computerName, computerGame, bufferedReader);
-//            computerPlayer.getComputerArrayTwo;
-//            computerGame.processUserInput(computerGame, userInputArrayTwo);
+            System.out.println("-------------------");
+            String[] computerInputArray = promptComputerForInput(computerName, computerGame);
+            computerGame.processUserInput(computerGame, computerInputArray);
 
             if (computerGame.allShipsHaveSunk(computerGame.getCarrier(),
                     computerGame.getBattleship(),
                     computerGame.getCruiser(),
                     computerGame.getSubmarine(),
                     computerGame.getDestroyer())) {
-                winnerName = playerOneName;
+                winnerName = computerName;
                 break;
             }
 
             System.out.println("-------------------");
-            System.out.println(playerOneGame.getCruiser().getSpaceCount());
-            System.out.println(computerGame.getCruiser().getSpaceCount());
         }
         System.out.println(winnerName + " wins!");
     }
@@ -139,5 +139,11 @@ public class BattleshipGame {
         return userInput.toLowerCase().trim().split("");
     }
 
+    private String[] promptComputerForInput(String playerName, BattleshipBoard playerGame) throws IOException {
+        System.out.println("Ready up " + playerName);
+        playerGame.getBattleshipGrid().printGrid();
+
+        return computerPlayer.getCoordinate();
+    }
 
 }

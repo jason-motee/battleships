@@ -34,7 +34,7 @@ public class BattleshipGrid {
         int checkCount = 0;
 
         for (int i = 0; i < size; i++) {
-            if(getSquare(row, column + i).getType().equals("Square")){
+            if(getSquare(row, column + i).getType().equals("Empty Square")){
                 checkCount += 1;
             }
         }
@@ -57,7 +57,7 @@ public class BattleshipGrid {
         int checkCount = 0;
 
         for (int i = 0; i < size; i++) {
-            if (getSquare(row + i, column).getType().equals("Square")) {
+            if (getSquare(row + i, column).getType().equals("Empty Square")) {
                 checkCount += 1;
             }
         }

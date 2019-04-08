@@ -72,7 +72,7 @@ public class BattleshipBoardTest {
     @Test
     public void givenAnEmptySpaceIsHit_ThenTheGridContainsMissedValue() {
         battleshipBoardOne.addShipsToGrid();
-        battleshipBoardOne.hit(0, 0);
+        battleshipBoardOne.applyCoordinates(0, 0);
 
         List<BattleshipSquare> battleshipGridAsList = Arrays.stream(battleshipBoardOne.getBattleshipGrid().getBoard())
                 .flatMap(Arrays::stream)
@@ -92,7 +92,7 @@ public class BattleshipBoardTest {
         for (int i = 0; i < battleshipBoardOne.getBattleshipGrid().getBoard().length; i++) {
             for (int j = 0; j < battleshipBoardOne.getBattleshipGrid().getBoard().length; j++) {
                 if (battleshipBoardOne.getBattleshipGrid().getSquare(i, j).getType().equals(carrier.getType())) {
-                    battleshipBoardOne.hit(i, j);
+                    battleshipBoardOne.applyCoordinates(i, j);
                     row = i;
                     column = j;
                     break Outer;
@@ -110,7 +110,7 @@ public class BattleshipBoardTest {
         for (int row = 0; row < battleshipBoardTwo.getBattleshipGrid().getBoard().length; row++) {
             for (int column = 0; column < battleshipBoardTwo.getBattleshipGrid().getBoard().length; column++) {
                 if (battleshipBoardTwo.getBattleshipGrid().getSquare(row, column).getType().equals(battleshipTwo.getType())) {
-                    battleshipBoardTwo.hit(row, column);
+                    battleshipBoardTwo.applyCoordinates(row, column);
                 }
             }
         }
@@ -137,7 +137,7 @@ public class BattleshipBoardTest {
                         || battleshipBoardOne.getBattleshipGrid().getSquare(row, column).getType().equals(submarine.getType())
                         || battleshipBoardOne.getBattleshipGrid().getSquare(row, column).getType().equals(cruiser.getType())
                         || battleshipBoardOne.getBattleshipGrid().getSquare(row, column).getType().equals(destroyer.getType())) {
-                    battleshipBoardOne.hit(row, column);
+                    battleshipBoardOne.applyCoordinates(row, column);
                 }
             }
         }

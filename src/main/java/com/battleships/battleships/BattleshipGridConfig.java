@@ -105,8 +105,14 @@ public class BattleshipGridConfig {
 
     @Bean
     public BattleshipGame battleshipGame(@Qualifier("boardOne") BattleshipBoard battleshipBoardOne,
-                                         @Qualifier("boardTwo") BattleshipBoard battleshipBoardTwo) {
-        return new BattleshipGame(battleshipBoardOne, battleshipBoardTwo);
+                                         @Qualifier("boardTwo") BattleshipBoard battleshipBoardTwo,
+                                         ComputerPlayer computerPlayer) {
+        return new BattleshipGame(battleshipBoardOne, battleshipBoardTwo, computerPlayer);
 
+    }
+
+    @Bean
+    public ComputerPlayer computerPlayer() {
+        return new ComputerPlayer();
     }
 }
