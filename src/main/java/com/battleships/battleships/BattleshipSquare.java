@@ -6,17 +6,21 @@ public class BattleshipSquare {
     private String state;
     private int space;
     private int spaceCount;
+    private String hitValue;
+    private String hitMessage;
     private String destroyedType = "None";
 
     public BattleshipSquare() {
-        this("Empty Square", "-", 0, 0);
+        this("Empty Square", "-", 0, 0, "o", "Target Missed!");
     }
 
-    public BattleshipSquare(String type, String state, int space, int spaceCount) {
+    public BattleshipSquare(String type, String state, int space, int spaceCount, String hitValue, String hitMessage) {
         this.type = type;
         this.state = state;
         this.space = space;
         this.spaceCount = spaceCount;
+        this.hitValue = hitValue;
+        this.hitMessage = hitMessage;
     }
 
     public String getType() {
@@ -39,10 +43,6 @@ public class BattleshipSquare {
         return spaceCount;
     }
 
-    public void minusOneSpaceCount() {
-        this.spaceCount -= 1;
-    }
-
     public String getDestroyedType() {
         return destroyedType;
     }
@@ -51,21 +51,17 @@ public class BattleshipSquare {
         this.destroyedType = destroyedType;
     }
 
+    public void printHitMessage() {
+        System.out.println(hitMessage);
+    }
+
     public BattleshipSquare hit() {
-        if(!this.getType().equals("Empty Square")) {
-            System.out.println(this.getType() + " hit!");
-            this.spaceCount -= 1;
-            BattleshipSquare battleshipSquare = new BattleshipSquare();
-            battleshipSquare.setState("*");
-            battleshipSquare.setDestroyedType(this.getType());
-            return battleshipSquare;
-        } else if (this.getDestroyedType().equals("None")){
-            System.out.println("Target missed!");
-            BattleshipSquare battleshipSquare = this;
-            battleshipSquare.setState("o");
-            return this;
-        }
-        return this;
+        printHitMessage();
+        this.spaceCount -= 1;
+        BattleshipSquare battleshipSquare = new BattleshipSquare();
+        battleshipSquare.setState(this.hitValue);
+        battleshipSquare.setDestroyedType(this.getType());
+        return battleshipSquare;
     }
 
     public void hideState() {

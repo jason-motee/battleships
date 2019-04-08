@@ -1,8 +1,9 @@
 package com.battleships.battleships;
 
-import org.springframework.stereotype.Component;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class ComputerPlayer {
 
@@ -51,10 +52,5 @@ public class ComputerPlayer {
         }
         System.out.println(hasBeenUsed);
         return hasBeenUsed;
-    }
-
-    public static void main(String[] args) {
-        ComputerPlayer com = new ComputerPlayer();
-        System.out.println(Arrays.toString(com.getCoordinate()));
     }
 }
