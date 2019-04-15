@@ -48,7 +48,7 @@ public class BattleshipGame {
 
         while (true) {
             String[] userInputArray = promptUserForInput(playerOneName, playerOneGame, bufferedReader);
-            playerOneGame.processUserInput(playerOneGame, userInputArray);
+            playerOneGame.processInput(playerOneGame, userInputArray);
 
             if (playerOneGame.allShipsHaveSunk(playerOneGame.getCarrier(),
                     playerOneGame.getBattleship(),
@@ -61,7 +61,7 @@ public class BattleshipGame {
 
             System.out.println("-------------------");
             String[] userInputArrayTwo = promptUserForInput(playerTwoName, playerTwoGame, bufferedReader);
-            playerTwoGame.processUserInput(playerTwoGame, userInputArrayTwo);
+            playerTwoGame.processInput(playerTwoGame, userInputArrayTwo);
 
             if (playerTwoGame.allShipsHaveSunk(playerTwoGame.getCarrier(),
                     playerTwoGame.getBattleship(),
@@ -102,7 +102,7 @@ public class BattleshipGame {
 
         while (true) {
             String[] userInputArray = promptUserForInput(playerOneName, playerOneGame, bufferedReader);
-            playerOneGame.processUserInput(playerOneGame, userInputArray);
+            playerOneGame.processInput(playerOneGame, userInputArray);
 
             if (playerOneGame.allShipsHaveSunk(playerOneGame.getCarrier(),
                     playerOneGame.getBattleship(),
@@ -115,7 +115,8 @@ public class BattleshipGame {
 
             System.out.println("-------------------");
             String[] computerInputArray = promptComputerForInput(computerName, computerGame);
-            computerGame.processUserInput(computerGame, computerInputArray);
+            computerGame.processInput(computerGame, computerInputArray);
+            computerPlayer.checkForHitShip(computerGame.getDestroyedType(computerGame, computerInputArray));
 
             if (computerGame.allShipsHaveSunk(computerGame.getCarrier(),
                     computerGame.getBattleship(),
@@ -139,7 +140,7 @@ public class BattleshipGame {
         return userInput.toLowerCase().trim().split("");
     }
 
-    private String[] promptComputerForInput(String playerName, BattleshipBoard playerGame) throws IOException {
+    private String[] promptComputerForInput(String playerName, BattleshipBoard playerGame) {
         System.out.println("Ready up " + playerName);
         playerGame.getBattleshipGrid().printGrid();
 

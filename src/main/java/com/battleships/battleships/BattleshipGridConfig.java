@@ -111,7 +111,7 @@ public class BattleshipGridConfig {
     }
 
     @Bean
-    public ComputerPlayer computerPlayer() {
-        return new ComputerPlayer();
+    public ComputerPlayer computerPlayer(@Qualifier("boardTwo") BattleshipBoard battleshipBoardTwo) {
+        return new ComputerPlayer(battleshipBoardTwo);
     }
 }

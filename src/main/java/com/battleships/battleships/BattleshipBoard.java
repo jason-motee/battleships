@@ -79,7 +79,7 @@ public class BattleshipBoard {
         }
     }
 
-    public void processUserInput(BattleshipBoard game, String[] userInputArray) {
+    public void processInput(BattleshipBoard game, String[] userInputArray) {
         int[] userCoordinates = game.coordinateConverter(userInputArray[0], userInputArray[1]);
         game.applyCoordinates(userCoordinates[0], userCoordinates[1]);
         game.getBattleshipGrid().printGrid();
@@ -108,5 +108,11 @@ public class BattleshipBoard {
             submarine.hideState();
             destroyer.hideState();
         }
+    }
+
+    public String getDestroyedType(BattleshipBoard computerGame, String[] computerInputArray) {
+        int[] userCoordinates = computerGame.coordinateConverter(computerInputArray[0], computerInputArray[1]);
+        BattleshipSquare squareAimedAt = battleshipGrid.getSquare(userCoordinates[0], userCoordinates[1]);
+        return squareAimedAt.getDestroyedType();
     }
 }
