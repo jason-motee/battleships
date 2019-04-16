@@ -119,6 +119,7 @@ public class BattleshipGame {
             System.out.println("-------------------");
             String[] computerInputArray = promptComputerForInput(computerName, computerGame);
             computerGame.processInput(computerGame, computerInputArray);
+            //
             computerPlayer.checkForHitShip(computerGame.getDestroyedType(computerGame, computerInputArray));
 
             if (computerGame.allShipsHaveSunk(computerGame.getCarrier(),

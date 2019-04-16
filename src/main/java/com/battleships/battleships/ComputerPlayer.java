@@ -247,6 +247,7 @@ public class ComputerPlayer {
         return hasBeenUsed;
     }
 
+    //
     public void checkForHitShip(String destroyedType) {
         if (destroyedType.equals(battleshipBoard.getCarrier().getType())) {
             hitArray.add(computerCoordinateArray);
