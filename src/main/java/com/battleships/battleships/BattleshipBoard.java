@@ -111,6 +111,7 @@ public class BattleshipBoard {
         }
     }
 
+    //
     public String getDestroyedType(BattleshipBoard computerGame, String[] computerInputArray) {
         int[] userCoordinates = computerGame.coordinateConverter(computerInputArray[0], computerInputArray[1]);
         BattleshipSquare squareAimedAt = battleshipGrid.getSquare(userCoordinates[0], userCoordinates[1]);
