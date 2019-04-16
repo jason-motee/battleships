@@ -3,7 +3,9 @@ package com.battleships.battleships;
 public class BattleshipBoard {
 
     private BattleshipGrid battleshipGrid;
+    //
     private BattleshipSquare battleshipSquare;
+    //
     private Carrier carrier;
     private Battleship battleship;
     private Cruiser cruiser;
@@ -58,6 +60,7 @@ public class BattleshipBoard {
         }
     }
 
+    //naming?
     public void applyCoordinates(int row, int column) {
         BattleshipSquare squareAimedAt = battleshipGrid.getSquare(row, column);
         battleshipGrid.setSquare(squareAimedAt.hit(), row, column);
@@ -65,6 +68,7 @@ public class BattleshipBoard {
     }
 
     private void checkForDestroyedShips(BattleshipSquare ship) {
+        //reverse condition?
         if (ship.getSpaceCount() == 0 && !ship.getType().equals("Empty Square")) {
             for (int row = 0; row < battleshipGrid.getBoard().length; row++) {
                 for (int column = 0; column < battleshipGrid.getBoard().length; column++) {
@@ -79,7 +83,9 @@ public class BattleshipBoard {
         }
     }
 
+    //
     public void processInput(BattleshipBoard game, String[] userInputArray) {
+        //
         int[] userCoordinates = game.coordinateConverter(userInputArray[0], userInputArray[1]);
         game.applyCoordinates(userCoordinates[0], userCoordinates[1]);
         game.getBattleshipGrid().printGrid();
@@ -110,6 +116,7 @@ public class BattleshipBoard {
         }
     }
 
+    //
     public String getDestroyedType(BattleshipBoard computerGame, String[] computerInputArray) {
         int[] userCoordinates = computerGame.coordinateConverter(computerInputArray[0], computerInputArray[1]);
         BattleshipSquare squareAimedAt = battleshipGrid.getSquare(userCoordinates[0], userCoordinates[1]);

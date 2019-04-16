@@ -1,13 +1,17 @@
 package com.battleships.battleships;
 
+//inheritance versus aggregation?
 public class BattleshipSquare {
 
     private String type;
+    //
     private String state;
     private int space;
     private int spaceCount;
     private String hitValue;
+    //
     private String hitMessage;
+    //
     private String destroyedType = "None";
 
     public BattleshipSquare() {
@@ -57,8 +61,10 @@ public class BattleshipSquare {
 
     public BattleshipSquare hit() {
         printHitMessage();
+        //
         this.spaceCount -= 1;
         BattleshipSquare battleshipSquare = new BattleshipSquare();
+        //
         battleshipSquare.setState(this.hitValue);
         battleshipSquare.setDestroyedType(this.getType());
         return battleshipSquare;

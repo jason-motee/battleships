@@ -31,14 +31,14 @@ public class BattleshipGame {
                 battleshipBoardOne.getCruiser(),
                 battleshipBoardOne.getSubmarine(),
                 battleshipBoardOne.getDestroyer());
-        battleshipBoardOne.hideShips(false);
+        battleshipBoardOne.hideShips(true);
 
         battleshipBoardTwo.addShipsToGrid(battleshipBoardTwo.getCarrier(),
                 battleshipBoardTwo.getBattleship(),
                 battleshipBoardTwo.getCruiser(),
                 battleshipBoardTwo.getSubmarine(),
                 battleshipBoardTwo.getDestroyer());
-        battleshipBoardTwo.hideShips(false);
+        battleshipBoardTwo.hideShips(true);
 
         BattleshipBoard playerOneGame = battleshipBoardOne;
         BattleshipBoard playerTwoGame = battleshipBoardTwo;
@@ -82,6 +82,7 @@ public class BattleshipGame {
         String playerOneName = playerInput.nextLine();
         String computerName = "Computer";
 
+        //
         battleshipBoardOne.addShipsToGrid(battleshipBoardOne.getCarrier(),
                 battleshipBoardOne.getBattleship(),
                 battleshipBoardOne.getCruiser(),
@@ -100,10 +101,12 @@ public class BattleshipGame {
 
         String winnerName;
 
+        //
         while (true) {
             String[] userInputArray = promptUserForInput(playerOneName, playerOneGame, bufferedReader);
             playerOneGame.processInput(playerOneGame, userInputArray);
 
+            //
             if (playerOneGame.allShipsHaveSunk(playerOneGame.getCarrier(),
                     playerOneGame.getBattleship(),
                     playerOneGame.getCruiser(),
@@ -116,6 +119,7 @@ public class BattleshipGame {
             System.out.println("-------------------");
             String[] computerInputArray = promptComputerForInput(computerName, computerGame);
             computerGame.processInput(computerGame, computerInputArray);
+            //
             computerPlayer.checkForHitShip(computerGame.getDestroyedType(computerGame, computerInputArray));
 
             if (computerGame.allShipsHaveSunk(computerGame.getCarrier(),

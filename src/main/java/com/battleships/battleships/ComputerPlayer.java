@@ -2,6 +2,7 @@ package com.battleships.battleships;
 
 import java.util.*;
 
+//
 public class ComputerPlayer {
 
     private BattleshipBoard battleshipBoard;
@@ -247,9 +248,12 @@ public class ComputerPlayer {
         return hasBeenUsed;
     }
 
+    //
     public void checkForHitShip(String destroyedType) {
+        //
         if (destroyedType.equals(battleshipBoard.getCarrier().getType())) {
             hitArray.add(computerCoordinateArray);
+            //
             numberOfHitsOnCarrier += 1;
             lastMoveWasHit = true;
         } else {
@@ -257,6 +261,7 @@ public class ComputerPlayer {
         }
     }
 
+    //
     public static void main(String[] args) {
         int a = 0;
         System.out.println(a - 1);
