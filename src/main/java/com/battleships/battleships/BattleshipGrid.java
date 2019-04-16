@@ -15,16 +15,17 @@ public class BattleshipGrid {
     }
 
     public void insertBattleShipIntoRandomPosition(BattleshipSquare battleship) {
+        //
         Random random = new Random();
-        int randomNumber = random.nextInt(2);
 
-        if (randomNumber == 0) {
+        if (random.nextBoolean()) {
             insertBattleshipIntoRandomRowPosition(battleship);
         } else {
             insertBattleshipIntoRandomColumnPosition(battleship);
         }
     }
 
+    //duplication
     public void insertBattleshipIntoRandomRowPosition(BattleshipSquare battleship) {
         Random random = new Random();
         int size = battleship.getSpace();
@@ -34,9 +35,12 @@ public class BattleshipGrid {
         int checkCount = 0;
 
         for (int i = 0; i < size; i++) {
+            //
             if(getSquare(row, column + i).getType().equals("Empty Square")){
+                //
                 checkCount += 1;
             }
+            //break?
         }
 
         if (checkCount == size) {
@@ -44,6 +48,7 @@ public class BattleshipGrid {
                 setSquare(battleship, row, column + i);
             }
         } else {
+            //
             this.insertBattleshipIntoRandomRowPosition(battleship);
         }
     }
@@ -71,6 +76,7 @@ public class BattleshipGrid {
         }
     }
 
+    //toString?
     public void printGrid() {
         for (int row = 0; row < board.length; row++) {
             System.out.print(board.length - row + " ");
@@ -82,6 +88,7 @@ public class BattleshipGrid {
         System.out.println("  A B C D E F G H I");
     }
 
+    //exposure?
     public BattleshipSquare[][] getBoard() {
         return board;
     }
