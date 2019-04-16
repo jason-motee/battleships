@@ -82,6 +82,7 @@ public class BattleshipGame {
         String playerOneName = playerInput.nextLine();
         String computerName = "Computer";
 
+        //
         battleshipBoardOne.addShipsToGrid(battleshipBoardOne.getCarrier(),
                 battleshipBoardOne.getBattleship(),
                 battleshipBoardOne.getCruiser(),
@@ -100,6 +101,7 @@ public class BattleshipGame {
 
         String winnerName;
 
+        //
         while (true) {
             String[] userInputArray = promptUserForInput(playerOneName, playerOneGame, bufferedReader);
             playerOneGame.processInput(playerOneGame, userInputArray);

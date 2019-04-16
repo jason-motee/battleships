@@ -79,6 +79,7 @@ public class BattleshipBoard {
         }
     }
 
+    //
     public void processInput(BattleshipBoard game, String[] userInputArray) {
         int[] userCoordinates = game.coordinateConverter(userInputArray[0], userInputArray[1]);
         game.applyCoordinates(userCoordinates[0], userCoordinates[1]);
