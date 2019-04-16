@@ -2,6 +2,7 @@ package com.battleships.battleships;
 
 import java.util.*;
 
+//
 public class ComputerPlayer {
 
     private BattleshipBoard battleshipBoard;

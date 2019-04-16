@@ -31,14 +31,14 @@ public class BattleshipGame {
                 battleshipBoardOne.getCruiser(),
                 battleshipBoardOne.getSubmarine(),
                 battleshipBoardOne.getDestroyer());
-        battleshipBoardOne.hideShips(false);
+        battleshipBoardOne.hideShips(true);
 
         battleshipBoardTwo.addShipsToGrid(battleshipBoardTwo.getCarrier(),
                 battleshipBoardTwo.getBattleship(),
                 battleshipBoardTwo.getCruiser(),
                 battleshipBoardTwo.getSubmarine(),
                 battleshipBoardTwo.getDestroyer());
-        battleshipBoardTwo.hideShips(false);
+        battleshipBoardTwo.hideShips(true);
 
         BattleshipBoard playerOneGame = battleshipBoardOne;
         BattleshipBoard playerTwoGame = battleshipBoardTwo;
